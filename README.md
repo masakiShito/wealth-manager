@@ -73,22 +73,73 @@ Database: MySQL
 
 ---
 
-## ディレクトリ構成（例）
+## ディレクトリ構成
 
-asset-management-app/
-├── frontend/
-├── backend/
+```
+wealth-manager/
+├── frontend/                # Next.js (App Router)
+│   ├── src/
+│   │   ├── app/             # App Router ページ
+│   │   ├── components/      # 共通コンポーネント
+│   │   └── lib/             # ユーティリティ
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── tailwind.config.ts
+│   └── tsconfig.json
+├── backend/                 # FastAPI
+│   ├── app/
+│   │   ├── api/             # APIエンドポイント
+│   │   ├── core/            # 設定・DB接続
+│   │   ├── models/          # SQLAlchemyモデル
+│   │   ├── schemas/         # Pydanticスキーマ
+│   │   └── main.py          # アプリケーションエントリ
+│   ├── Dockerfile
+│   └── requirements.txt
 ├── db/
+│   └── init/                # DB初期化SQL
 ├── docker-compose.yml
+├── .env                     # 環境変数（git管理外）
+├── .env.example             # 環境変数テンプレート
 └── README.md
+```
 
 ---
 
 ## セットアップ
 
-git clone https://github.com/your-name/asset-management-app.git  
-cd asset-management-app  
-docker compose up -d --build  
+```bash
+# 1. リポジトリをクローン
+git clone https://github.com/your-name/wealth-manager.git
+cd wealth-manager
+
+# 2. 環境変数ファイルを作成
+cp .env.example .env
+
+# 3. Docker コンテナを起動
+docker compose up -d --build
+```
+
+### アクセスURL
+
+| サービス | URL |
+|---|---|
+| Frontend (Next.js) | http://localhost:3000 |
+| Backend (FastAPI) | http://localhost:8000 |
+| API Docs (Swagger) | http://localhost:8000/docs |
+| Health Check | http://localhost:8000/health |
+| MySQL | localhost:3306 |
+
+### コンテナの停止
+
+```bash
+docker compose down
+```
+
+### データを含めて完全にリセット
+
+```bash
+docker compose down -v
+```
 
 ---
 
