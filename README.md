@@ -2,16 +2,16 @@
 
 老後資産がどのくらい必要かを試算し、現在の資産状況・積立状況で老後資産が足りるかを確認するためのWebアプリです。
 
-本プロジェクトでは、AIは開発補助にのみ利用し、アプリの機能としては利用しません。
+> **注意**: 本プロジェクトでは、AIは開発補助にのみ利用し、アプリの機能としては利用しません。
 
 ---
 
-## 主な機能（予定）
+## このアプリの目的
 
-- 現在の資産額を管理する
-- 毎月の収支・積立可能額を管理する
-- 老後条件（退職年齢、寿命、老後生活費、年金見込みなど）を設定する
-- 将来の老後資産シミュレーションを行う
+- 現在の総資産を把握する
+- 毎月の収支と積立可能額を把握する
+- 老後条件（退職年齢、寿命、生活費、年金など）を設定する
+- 将来の老後資産シミュレーションを行い、過不足を確認する
 
 ---
 
@@ -19,10 +19,11 @@
 
 | カテゴリ | 技術 |
 |---|---|
-| Frontend | Next.js (App Router), TypeScript, Tailwind CSS |
+| Frontend | Next.js 15 (App Router), TypeScript, Tailwind CSS |
 | Backend | FastAPI, Python 3.11, SQLAlchemy, Pydantic |
-| Database | MySQL 8 |
+| Database | MySQL 8.0 |
 | Infrastructure | Docker, Docker Compose |
+| Code Quality | ESLint (frontend), Ruff (backend) |
 
 ---
 
@@ -34,6 +35,7 @@ wealth-manager/
 │   ├── src/
 │   │   ├── app/             # App Router ページ
 │   │   ├── components/      # 共通コンポーネント
+│   │   ├── features/        # 機能別モジュール
 │   │   ├── lib/             # ユーティリティ・API通信
 │   │   └── types/           # 型定義
 │   ├── Dockerfile
@@ -43,13 +45,16 @@ wealth-manager/
 ├── backend/                 # FastAPI
 │   ├── app/
 │   │   ├── api/v1/          # APIエンドポイント（v1）
-│   │   ├── core/            # 設定・DB接続
+│   │   ├── core/            # 設定・認証・共通設定
+│   │   ├── db/              # DB接続・セッション管理
 │   │   ├── models/          # SQLAlchemyモデル
 │   │   ├── schemas/         # Pydanticスキーマ
 │   │   ├── services/        # ビジネスロジック
 │   │   └── main.py          # アプリケーションエントリ
+│   ├── alembic/             # DBマイグレーション
 │   ├── Dockerfile
-│   └── requirements.txt
+│   ├── requirements.txt
+│   └── ruff.toml
 ├── db/
 │   └── init/                # DB初期化SQL
 ├── docs/                    # ドキュメント
@@ -62,7 +67,13 @@ wealth-manager/
 
 ---
 
-## セットアップ
+## 起動手順
+
+### 前提条件
+
+- Docker および Docker Compose がインストールされていること
+
+### 手順
 
 ```bash
 # 1. リポジトリをクローン
@@ -72,9 +83,11 @@ cd wealth-manager
 # 2. 環境変数ファイルを作成
 cp .env.example .env
 
-# 3. Docker コンテナを起動
+# 3. Docker コンテナをビルド・起動
 docker compose up --build
 ```
+
+初回起動時はビルドに数分かかります。すべてのコンテナが起動するまでお待ちください。
 
 ### アクセスURL
 
@@ -83,9 +96,17 @@ docker compose up --build
 | Frontend (Next.js) | http://localhost:3000 |
 | Backend (FastAPI) | http://localhost:8000 |
 | API Docs (Swagger) | http://localhost:8000/docs |
-| Health Check | http://localhost:8000/health |
-| API v1 Health | http://localhost:8000/api/v1/health |
+| Health Check | http://localhost:8000/api/v1/health |
 | MySQL | localhost:3306 |
+
+### マイグレーション
+
+バックエンドコンテナ起動時に自動的に `alembic upgrade head` が実行されます。
+手動で実行する場合:
+
+```bash
+docker compose exec backend alembic upgrade head
+```
 
 ### コンテナの停止
 
@@ -101,17 +122,24 @@ docker compose down -v
 
 ---
 
-## 今後の実装予定
+## 実装済みの機能
 
-- [ ] ユーザー認証機能
-- [ ] 資産種別・口座管理
+- [x] Docker による開発環境（frontend / backend / db）
+- [x] Alembic マイグレーション（全テーブル作成）
+- [x] JWT ユーザー認証（登録・ログイン）
+- [x] 資産種別・口座の CRUD API
+- [x] 月次収支の CRUD API
+- [x] Health Check API
+
+## 今後追加予定の機能
+
 - [ ] 資産スナップショット記録
-- [ ] 月次収支管理
 - [ ] 老後プロファイル設定
 - [ ] 積立プラン管理
 - [ ] 老後資産シミュレーション
 - [ ] ダッシュボード・グラフ表示
-- [ ] マイグレーション（Alembic）導入
+- [ ] フロントエンド画面の実装
+- [ ] テストコード整備
 
 ---
 
