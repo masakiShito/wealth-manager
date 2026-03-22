@@ -6,17 +6,31 @@
 
 老後資産がどのくらい必要かを試算し、現在の資産状況・積立状況で老後資産が足りるかを確認するためのWebアプリ。
 
-### 主要機能
+単なる家計簿ではなく、将来のシミュレーションに繋がる資産管理を目指す。
+
+### 主要機能（想定）
 
 1. **資産管理**: 現在の保有資産（預金、投資信託、株式など）を種別・口座ごとに管理する
 2. **収支管理**: 毎月の収入・支出・積立可能額を記録する
 3. **老後条件設定**: 退職年齢、想定寿命、老後の月額生活費、年金見込み額などを設定する
 4. **シミュレーション**: 上記データをもとに、老後資産の過不足を試算する
 
-### 対象ユーザー
+### 初期版で実装する範囲
 
-- 老後の資産形成に関心がある個人
-- 現在の貯蓄・投資ペースで老後資金が足りるかを確認したい人
+- Docker による開発環境構築（frontend / backend / db）
+- フロントエンドのトップページ表示
+- バックエンドの health check API（`/api/v1/health`）
+- 将来の機能追加に耐えるディレクトリ構成
+
+### 将来拡張
+
+- ユーザー認証
+- 資産種別・口座の CRUD
+- 月次収支の記録・集計
+- 老後プロファイル設定
+- 積立プラン管理
+- 老後資産シミュレーション（グラフ表示含む）
+- Alembic によるDBマイグレーション
 
 ### 技術方針
 
@@ -26,7 +40,8 @@
 
 ### 技術スタック
 
-- **Frontend**: Next.js (App Router) / TypeScript / Tailwind CSS
+- **Frontend**: Next.js 15 (App Router) / TypeScript / Tailwind CSS
 - **Backend**: FastAPI / Python 3.11 / SQLAlchemy / Pydantic
-- **Database**: MySQL 8
+- **Database**: MySQL 8.0
 - **Infrastructure**: Docker / Docker Compose
+- **Code Quality**: ESLint (frontend) / Ruff (backend)
