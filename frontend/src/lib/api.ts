@@ -20,3 +20,17 @@ export async function fetchApi<T>(
 
   return res.json();
 }
+
+export async function fetchApiWithAuth<T>(
+  path: string,
+  token: string,
+  options?: RequestInit
+): Promise<T> {
+  return fetchApi<T>(path, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...options?.headers,
+    },
+  });
+}
