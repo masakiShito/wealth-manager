@@ -5,6 +5,9 @@ class Settings(BaseSettings):
     APP_NAME: str = "Wealth Manager API"
     DATABASE_URL: str = "mysql+pymysql://app_user:app_password@db:3306/wealth_manager"
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    SECRET_KEY: str = "change-me-in-production"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     class Config:
         env_file = ".env"

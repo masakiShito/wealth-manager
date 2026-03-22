@@ -45,12 +45,13 @@ wealth-manager/
 ├── backend/                 # FastAPI
 │   ├── app/
 │   │   ├── api/v1/          # APIエンドポイント（v1）
-│   │   ├── core/            # 設定・共通設定
+│   │   ├── core/            # 設定・認証・共通設定
 │   │   ├── db/              # DB接続・セッション管理
 │   │   ├── models/          # SQLAlchemyモデル
 │   │   ├── schemas/         # Pydanticスキーマ
 │   │   ├── services/        # ビジネスロジック
 │   │   └── main.py          # アプリケーションエントリ
+│   ├── alembic/             # DBマイグレーション
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── ruff.toml
@@ -98,6 +99,15 @@ docker compose up --build
 | Health Check | http://localhost:8000/api/v1/health |
 | MySQL | localhost:3306 |
 
+### マイグレーション
+
+バックエンドコンテナ起動時に自動的に `alembic upgrade head` が実行されます。
+手動で実行する場合:
+
+```bash
+docker compose exec backend alembic upgrade head
+```
+
 ### コンテナの停止
 
 ```bash
@@ -112,17 +122,23 @@ docker compose down -v
 
 ---
 
+## 実装済みの機能
+
+- [x] Docker による開発環境（frontend / backend / db）
+- [x] Alembic マイグレーション（全テーブル作成）
+- [x] JWT ユーザー認証（登録・ログイン）
+- [x] 資産種別・口座の CRUD API
+- [x] 月次収支の CRUD API
+- [x] Health Check API
+
 ## 今後追加予定の機能
 
-- [ ] ユーザー認証機能
-- [ ] 資産種別・口座管理
 - [ ] 資産スナップショット記録
-- [ ] 月次収支管理
 - [ ] 老後プロファイル設定
 - [ ] 積立プラン管理
 - [ ] 老後資産シミュレーション
 - [ ] ダッシュボード・グラフ表示
-- [ ] マイグレーション（Alembic）導入
+- [ ] フロントエンド画面の実装
 - [ ] テストコード整備
 
 ---
