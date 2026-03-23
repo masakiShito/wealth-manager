@@ -35,7 +35,7 @@ export default function Home() {
         <h1 className="text-h1 text-gray-900 mb-4">
           資産管理アプリ
         </h1>
-        <p className="text-body text-gray-700 mb-8 leading-relaxed">
+        <p className="text-body text-gray-700 mb-8 leading-relaxed max-w-xl mx-auto">
           老後資産シミュレーションを目的とした資産管理アプリ。
           <br />
           現在の資産や毎月の収支を記録し、将来の資産推移を把握しましょう。
@@ -47,7 +47,7 @@ export default function Home() {
               <h2 className="text-body font-semibold text-gray-900 mb-1">
                 {feature.title}
               </h2>
-              <p className="text-caption text-gray-500">
+              <p className="text-caption text-gray-700">
                 {feature.description}
               </p>
             </Card>

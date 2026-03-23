@@ -76,7 +76,7 @@ export default function RegisterPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-caption text-center text-gray-500">
+        <p className="mt-6 text-body text-center text-gray-700">
           アカウントをお持ちの方は{" "}
           <Link
             href="/login"

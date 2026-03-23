@@ -70,7 +70,7 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-caption text-center text-gray-500">
+        <p className="mt-6 text-body text-center text-gray-700">
           アカウントをお持ちでない方は{" "}
           <Link
             href="/register"

@@ -11,19 +11,19 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#556B2F",
-          light: "#6B8E23",
-          dark: "#3E5022",
+          DEFAULT: "#2E7D32",
+          light: "#43A047",
+          dark: "#1B5E20",
         },
         secondary: {
-          DEFAULT: "#8FA31E",
-          light: "#A4B84A",
-          dark: "#6E7E17",
+          DEFAULT: "#558B2F",
+          light: "#689F38",
+          dark: "#33691E",
         },
         accent: {
-          DEFAULT: "#C6D870",
-          light: "#D4E494",
-          dark: "#B0C44E",
+          DEFAULT: "#AED581",
+          light: "#C5E1A5",
+          dark: "#9CCC65",
         },
         background: {
           DEFAULT: "#F5F7FA",
@@ -31,27 +31,29 @@ const config: Config = {
           subtle: "#EDF0F5",
         },
         danger: {
-          DEFAULT: "#E53935",
+          DEFAULT: "#D32F2F",
           light: "#FFEBEE",
-          dark: "#C62828",
+          dark: "#B71C1C",
         },
         warning: {
-          DEFAULT: "#FB8C00",
+          DEFAULT: "#EF6C00",
           light: "#FFF3E0",
         },
         info: {
-          DEFAULT: "#1E88E5",
+          DEFAULT: "#1565C0",
           light: "#E3F2FD",
         },
         success: {
-          DEFAULT: "#43A047",
+          DEFAULT: "#2E7D32",
           light: "#E8F5E9",
         },
         gray: {
-          900: "#1A1A1A",
-          700: "#4F4F4F",
-          500: "#9E9E9E",
-          200: "#E0E0E0",
+          900: "#111827",
+          700: "#374151",
+          500: "#6B7280",
+          400: "#9CA3AF",
+          200: "#E5E7EB",
+          100: "#F3F4F6",
           50: "#F9FAFB",
         },
       },
@@ -70,10 +72,10 @@ const config: Config = {
         lg: "12px",
       },
       boxShadow: {
-        card: "0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)",
+        card: "0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)",
         "card-hover":
-          "0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04)",
-        modal: "0 8px 30px rgba(0, 0, 0, 0.12)",
+          "0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.08)",
+        modal: "0 8px 30px rgba(0, 0, 0, 0.18)",
       },
       spacing: {
         "1": "4px",

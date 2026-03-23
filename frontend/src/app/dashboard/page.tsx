@@ -45,24 +45,24 @@ function DashboardContent() {
     <div className="space-y-[32px]">
       <div>
         <h1 className="text-h1 text-gray-900">ダッシュボード</h1>
-        <p className="text-caption text-gray-500 mt-1">資産状況の概要</p>
+        <p className="text-body text-gray-500 mt-1">資産状況の概要</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <Card hover padding="lg">
-          <p className="text-caption text-gray-500 mb-1 tracking-wide uppercase">資産口座数</p>
+          <p className="text-caption font-semibold text-gray-700 mb-1 tracking-wide uppercase">資産口座数</p>
           <p className="text-[32px] font-bold text-gray-900 leading-tight">{accounts.length}</p>
           <p className="text-caption text-gray-500 mt-2">登録済みの口座</p>
         </Card>
         <Card hover padding="lg">
-          <p className="text-caption text-gray-500 mb-1 tracking-wide uppercase">今月の収入</p>
+          <p className="text-caption font-semibold text-gray-700 mb-1 tracking-wide uppercase">今月の収入</p>
           <p className="text-[32px] font-bold text-success leading-tight">
             {thisMonthCf ? `¥${fmt(thisMonthCf.income)}` : "---"}
           </p>
           <p className="text-caption text-gray-500 mt-2">{currentMonth} の収入合計</p>
         </Card>
         <Card hover padding="lg">
-          <p className="text-caption text-gray-500 mb-1 tracking-wide uppercase">今月の支出</p>
+          <p className="text-caption font-semibold text-gray-700 mb-1 tracking-wide uppercase">今月の支出</p>
           <p className="text-[32px] font-bold text-danger leading-tight">
             {thisMonthCf ? `¥${fmt(thisMonthCf.expense)}` : "---"}
           </p>
@@ -72,7 +72,7 @@ function DashboardContent() {
 
       {thisMonthCf && (
         <Card padding="lg">
-          <p className="text-caption text-gray-500 mb-1 tracking-wide uppercase">今月の積立額</p>
+          <p className="text-caption font-semibold text-gray-700 mb-1 tracking-wide uppercase">今月の積立額</p>
           <p className="text-[32px] font-bold text-primary leading-tight">
             ¥{fmt(thisMonthCf.savings)}
           </p>
@@ -81,7 +81,7 @@ function DashboardContent() {
       )}
 
       <Card padding="lg">
-        <p className="text-caption text-gray-500 mb-4 tracking-wide uppercase">クイックアクション</p>
+        <p className="text-caption font-semibold text-gray-700 mb-4 tracking-wide uppercase">クイックアクション</p>
         <div className="flex gap-4">
           <Link href="/assets">
             <Button size="lg">資産口座を管理する</Button>
