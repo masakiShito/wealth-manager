@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/features/auth/AuthContext";
+import { Button, Card, Input, Alert } from "@/components/ui";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -34,57 +35,51 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-[80vh] items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-lg border border-gray-200 p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center">ログイン</h1>
+    <div className="flex min-h-[75vh] items-center justify-center">
+      <Card className="w-full max-w-md" padding="lg">
+        <h1 className="text-h2 text-center mb-8">ログイン</h1>
+
         {error && (
-          <p className="text-red-600 text-sm mb-4 bg-red-50 p-3 rounded">
+          <Alert variant="error" className="mb-6">
             {error}
-          </p>
+          </Alert>
         )}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
-              メールアドレス
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium mb-1"
-            >
-              パスワード
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <button
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            id="email"
+            type="email"
+            label="メールアドレス"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            id="password"
+            type="password"
+            label="パスワード"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button
             type="submit"
             disabled={submitting}
-            className="w-full bg-blue-600 text-white py-2.5 rounded hover:bg-blue-700 disabled:opacity-50"
+            className="w-full"
+            size="lg"
           >
             {submitting ? "ログイン中..." : "ログイン"}
-          </button>
+          </Button>
         </form>
-        <p className="mt-4 text-sm text-center text-gray-500">
+
+        <p className="mt-6 text-caption text-center text-gray-500">
           アカウントをお持ちでない方は{" "}
-          <Link href="/register" className="text-blue-600 hover:underline">
+          <Link
+            href="/register"
+            className="text-primary font-medium hover:text-primary-light transition-base"
+          >
             新規登録
           </Link>
         </p>
-      </div>
-    </main>
+      </Card>
+    </div>
   );
 }

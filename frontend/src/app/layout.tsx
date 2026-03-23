@@ -15,10 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className="min-h-screen bg-gray-50 text-gray-900">
+      <body className="min-h-screen bg-background text-gray-900 font-sans antialiased">
         <AuthProvider>
           <Header />
-          {children}
+          <main className="max-w-layout mx-auto px-4 py-8">
+            {children}
+          </main>
         </AuthProvider>
       </body>
     </html>

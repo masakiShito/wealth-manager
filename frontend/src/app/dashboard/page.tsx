@@ -6,6 +6,7 @@ import AuthGuard from "@/components/AuthGuard";
 import { useAuth } from "@/features/auth/AuthContext";
 import { fetchApiWithAuth } from "@/lib/api";
 import type { AssetAccount, Cashflow } from "@/types";
+import { Button, Card, Loading } from "@/components/ui";
 
 function DashboardContent() {
   const { token } = useAuth();
@@ -27,7 +28,7 @@ function DashboardContent() {
   }, [token]);
 
   if (loading) {
-    return <p className="text-gray-500">読み込み中...</p>;
+    return <Loading message="データを取得中..." />;
   }
 
   const currentMonth = new Date().toISOString().slice(0, 7);
@@ -41,49 +42,43 @@ function DashboardContent() {
   };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">ダッシュボード</h1>
+    <div className="space-y-8">
+      <h1 className="text-h1">ダッシュボード</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <p className="text-sm text-gray-500 mb-1">資産口座数</p>
-          <p className="text-3xl font-bold">{accounts.length}</p>
-        </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <p className="text-sm text-gray-500 mb-1">今月の収入</p>
-          <p className="text-3xl font-bold text-green-600">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <Card hover>
+          <p className="text-caption text-gray-500 mb-2">資産口座数</p>
+          <p className="text-4xl font-bold text-gray-900">{accounts.length}</p>
+        </Card>
+        <Card hover>
+          <p className="text-caption text-gray-500 mb-2">今月の収入</p>
+          <p className="text-4xl font-bold text-success">
             {thisMonthCf ? `¥${fmt(thisMonthCf.income)}` : "---"}
           </p>
-        </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <p className="text-sm text-gray-500 mb-1">今月の支出</p>
-          <p className="text-3xl font-bold text-red-600">
+        </Card>
+        <Card hover>
+          <p className="text-caption text-gray-500 mb-2">今月の支出</p>
+          <p className="text-4xl font-bold text-danger">
             {thisMonthCf ? `¥${fmt(thisMonthCf.expense)}` : "---"}
           </p>
-        </div>
+        </Card>
       </div>
 
       {thisMonthCf && (
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <p className="text-sm text-gray-500 mb-1">今月の積立額</p>
-          <p className="text-2xl font-bold text-blue-600">
+        <Card>
+          <p className="text-caption text-gray-500 mb-2">今月の積立額</p>
+          <p className="text-3xl font-bold text-primary">
             ¥{fmt(thisMonthCf.savings)}
           </p>
-        </div>
+        </Card>
       )}
 
       <div className="flex gap-4">
-        <Link
-          href="/assets"
-          className="bg-blue-600 text-white px-5 py-2.5 rounded hover:bg-blue-700"
-        >
-          資産口座を管理する
+        <Link href="/assets">
+          <Button size="lg">資産口座を管理する</Button>
         </Link>
-        <Link
-          href="/cashflows"
-          className="border border-blue-600 text-blue-600 px-5 py-2.5 rounded hover:bg-blue-50"
-        >
-          月次収支を管理する
+        <Link href="/cashflows">
+          <Button variant="outline" size="lg">月次収支を管理する</Button>
         </Link>
       </div>
     </div>
@@ -93,9 +88,7 @@ function DashboardContent() {
 export default function DashboardPage() {
   return (
     <AuthGuard>
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        <DashboardContent />
-      </main>
+      <DashboardContent />
     </AuthGuard>
   );
 }

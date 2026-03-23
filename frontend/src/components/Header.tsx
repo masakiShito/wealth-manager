@@ -2,69 +2,80 @@
 
 import Link from "next/link";
 import { useAuth } from "@/features/auth/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { Button } from "@/components/ui";
 
 export default function Header() {
   const { user, isLoading, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = () => {
     logout();
     router.push("/");
   };
 
+  const navLinks = [
+    { href: "/dashboard", label: "ダッシュボード" },
+    { href: "/assets", label: "資産口座" },
+    { href: "/cashflows", label: "月次収支" },
+  ];
+
   return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="text-lg font-bold text-blue-600">
+    <header className="bg-background-card border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
+      <div className="max-w-layout mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-8">
+          <Link
+            href="/"
+            className="text-h3 font-bold text-primary transition-base hover:text-primary-light"
+          >
             Wealth Manager
           </Link>
           {user && (
-            <nav className="flex gap-4 text-sm">
-              <Link
-                href="/dashboard"
-                className="text-gray-600 hover:text-blue-600"
-              >
-                ダッシュボード
-              </Link>
-              <Link
-                href="/assets"
-                className="text-gray-600 hover:text-blue-600"
-              >
-                資産口座
-              </Link>
-              <Link
-                href="/cashflows"
-                className="text-gray-600 hover:text-blue-600"
-              >
-                月次収支
-              </Link>
+            <nav className="hidden sm:flex gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`
+                    px-3 py-2 rounded-lg text-caption font-medium transition-base
+                    ${
+                      pathname === link.href
+                        ? "bg-accent/30 text-primary"
+                        : "text-gray-700 hover:bg-background-subtle hover:text-primary"
+                    }
+                  `.trim()}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </nav>
           )}
         </div>
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-4">
           {isLoading ? null : user ? (
             <>
-              <span className="text-gray-700">{user.name}</span>
+              <span className="text-caption text-gray-700 hidden sm:inline">
+                {user.name}
+              </span>
               <button
                 onClick={handleLogout}
-                className="text-gray-500 hover:text-red-600"
+                className="text-caption text-gray-500 hover:text-danger transition-base"
               >
                 ログアウト
               </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="text-gray-600 hover:text-blue-600">
+              <Link
+                href="/login"
+                className="text-caption text-gray-700 hover:text-primary transition-base"
+              >
                 ログイン
               </Link>
-              <Link
-                href="/register"
-                className="bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700"
-              >
+              <Button size="sm" onClick={() => router.push("/register")}>
                 新規登録
-              </Link>
+              </Button>
             </>
           )}
         </div>
