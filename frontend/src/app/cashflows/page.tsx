@@ -174,7 +174,7 @@ function CashflowsContent() {
 
       {cashflows.length === 0 ? (
         <Card padding="lg" className="text-center">
-          <p className="text-gray-500">
+          <p className="text-gray-700">
             収支データが登録されていません。「収支を追加」ボタンから追加してください。
           </p>
         </Card>

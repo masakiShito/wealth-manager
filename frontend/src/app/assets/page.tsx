@@ -242,7 +242,7 @@ function AssetsContent() {
 
       {accounts.length === 0 ? (
         <Card padding="lg" className="text-center">
-          <p className="text-gray-500">
+          <p className="text-gray-700">
             口座が登録されていません。「口座を追加」ボタンから追加してください。
           </p>
         </Card>
