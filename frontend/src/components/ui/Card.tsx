@@ -22,7 +22,7 @@ export default function Card({
   return (
     <div
       className={`
-        bg-background-card rounded-lg shadow-card
+        bg-background-card rounded-xl shadow-card
         ${paddingStyles[padding]}
         ${hover ? "transition-base hover:shadow-card-hover" : ""}
         ${className}

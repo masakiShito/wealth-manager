@@ -12,7 +12,7 @@ const config: Config = {
       colors: {
         primary: {
           DEFAULT: "#556B2F",
-          light: "#6B8A3E",
+          light: "#6B8E23",
           dark: "#3E5022",
         },
         secondary: {
@@ -26,9 +26,9 @@ const config: Config = {
           dark: "#B0C44E",
         },
         background: {
-          DEFAULT: "#EFF5D2",
+          DEFAULT: "#F5F7FA",
           card: "#FFFFFF",
-          subtle: "#F5F8E4",
+          subtle: "#EDF0F5",
         },
         danger: {
           DEFAULT: "#E53935",

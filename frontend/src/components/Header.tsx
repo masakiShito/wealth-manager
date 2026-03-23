@@ -41,7 +41,7 @@ export default function Header() {
                     px-3 py-2 rounded-lg text-caption font-medium transition-base
                     ${
                       pathname === link.href
-                        ? "bg-accent/30 text-primary"
+                        ? "bg-background-subtle text-primary font-semibold"
                         : "text-gray-700 hover:bg-background-subtle hover:text-primary"
                     }
                   `.trim()}

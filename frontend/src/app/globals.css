@@ -10,15 +10,15 @@
 :root {
   /* Colors */
   --color-primary: #556B2F;
-  --color-primary-light: #6B8A3E;
+  --color-primary-light: #6B8E23;
   --color-primary-dark: #3E5022;
   --color-secondary: #8FA31E;
   --color-secondary-light: #A4B84A;
   --color-accent: #C6D870;
   --color-accent-light: #D4E494;
-  --color-background: #EFF5D2;
+  --color-background: #F5F7FA;
   --color-background-card: #FFFFFF;
-  --color-background-subtle: #F5F8E4;
+  --color-background-subtle: #EDF0F5;
 
   --color-danger: #E53935;
   --color-danger-light: #FFEBEE;
