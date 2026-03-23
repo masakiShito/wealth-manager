@@ -5,6 +5,8 @@ import AuthGuard from "@/components/AuthGuard";
 import { useAuth } from "@/features/auth/AuthContext";
 import { fetchApiWithAuth } from "@/lib/api";
 import type { Cashflow } from "@/types";
+import { Button, Card, Input, Alert } from "@/components/ui";
+import Loading from "@/components/ui/Loading";
 
 function formatNumber(v: string | number): string {
   return Number(v).toLocaleString("ja-JP");
@@ -16,7 +18,6 @@ function CashflowsContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Add form
   const [showForm, setShowForm] = useState(false);
   const [formYearMonth, setFormYearMonth] = useState("");
   const [formIncome, setFormIncome] = useState("");
@@ -24,7 +25,6 @@ function CashflowsContent() {
   const [formSavings, setFormSavings] = useState("");
   const [formSubmitting, setFormSubmitting] = useState(false);
 
-  // Edit
   const [editId, setEditId] = useState<number | null>(null);
   const [editIncome, setEditIncome] = useState("");
   const [editExpense, setEditExpense] = useState("");
@@ -112,128 +112,103 @@ function CashflowsContent() {
   };
 
   if (loading) {
-    return <p className="text-gray-500">読み込み中...</p>;
+    return <Loading message="収支データを取得中..." />;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">月次収支管理</h1>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
-        >
+        <h1 className="text-h1">月次収支管理</h1>
+        <Button size="sm" onClick={() => setShowForm(!showForm)}>
           {showForm ? "フォームを閉じる" : "収支を追加"}
-        </button>
+        </Button>
       </div>
 
       {error && (
-        <p className="text-red-600 text-sm bg-red-50 p-3 rounded">{error}</p>
+        <Alert variant="error">{error}</Alert>
       )}
 
       {showForm && (
-        <form
-          onSubmit={handleAdd}
-          className="bg-white border border-gray-200 rounded-lg p-5 space-y-4"
-        >
-          <h2 className="font-semibold">新規収支を追加</h2>
-          <div className="grid grid-cols-4 gap-4">
-            <div>
-              <label
-                htmlFor="yearMonth"
-                className="block text-sm font-medium mb-1"
-              >
-                年月
-              </label>
-              <input
+        <Card>
+          <form onSubmit={handleAdd} className="space-y-4">
+            <h2 className="text-h3">新規収支を追加</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+              <Input
                 id="yearMonth"
+                label="年月"
                 type="month"
                 value={formYearMonth}
                 onChange={(e) => setFormYearMonth(e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="income"
-                className="block text-sm font-medium mb-1"
-              >
-                収入
-              </label>
-              <input
+              <Input
                 id="income"
+                label="収入"
                 type="number"
                 value={formIncome}
                 onChange={(e) => setFormIncome(e.target.value)}
                 placeholder="0"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="expense"
-                className="block text-sm font-medium mb-1"
-              >
-                支出
-              </label>
-              <input
+              <Input
                 id="expense"
+                label="支出"
                 type="number"
                 value={formExpense}
                 onChange={(e) => setFormExpense(e.target.value)}
                 placeholder="0"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="savings"
-                className="block text-sm font-medium mb-1"
-              >
-                積立額
-              </label>
-              <input
+              <Input
                 id="savings"
+                label="積立額"
                 type="number"
                 value={formSavings}
                 onChange={(e) => setFormSavings(e.target.value)}
                 placeholder="0"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-          </div>
-          <button
-            type="submit"
-            disabled={formSubmitting}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 text-sm"
-          >
-            {formSubmitting ? "追加中..." : "収支を追加"}
-          </button>
-        </form>
+            <Button type="submit" disabled={formSubmitting} size="sm">
+              {formSubmitting ? "追加中..." : "収支を追加"}
+            </Button>
+          </form>
+        </Card>
       )}
 
       {cashflows.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-lg p-8 text-center text-gray-500">
-          収支データが登録されていません。「収支を追加」ボタンから追加してください。
-        </div>
+        <Card padding="lg" className="text-center">
+          <p className="text-gray-500">
+            収支データが登録されていません。「収支を追加」ボタンから追加してください。
+          </p>
+        </Card>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="text-left px-4 py-3 font-medium">年月</th>
-                <th className="text-right px-4 py-3 font-medium">収入</th>
-                <th className="text-right px-4 py-3 font-medium">支出</th>
-                <th className="text-right px-4 py-3 font-medium">積立額</th>
-                <th className="text-right px-4 py-3 font-medium">操作</th>
+        <Card padding="sm" className="overflow-hidden">
+          <table className="w-full text-caption">
+            <thead>
+              <tr className="border-b border-gray-200 bg-background-subtle">
+                <th className="text-left px-4 py-3 font-medium text-gray-700">
+                  年月
+                </th>
+                <th className="text-right px-4 py-3 font-medium text-gray-700">
+                  収入
+                </th>
+                <th className="text-right px-4 py-3 font-medium text-gray-700">
+                  支出
+                </th>
+                <th className="text-right px-4 py-3 font-medium text-gray-700">
+                  積立額
+                </th>
+                <th className="text-right px-4 py-3 font-medium text-gray-700">
+                  操作
+                </th>
               </tr>
             </thead>
             <tbody>
               {cashflows.map((cf) => (
-                <tr key={cf.id} className="border-b border-gray-100">
+                <tr
+                  key={cf.id}
+                  className="border-b border-gray-200 last:border-b-0 transition-base hover:bg-background-subtle/50"
+                >
                   {editId === cf.id ? (
                     <>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 text-gray-900">
                         {cf.year_month.slice(0, 7)}
                       </td>
                       <td className="px-4 py-3">
@@ -241,7 +216,7 @@ function CashflowsContent() {
                           type="number"
                           value={editIncome}
                           onChange={(e) => setEditIncome(e.target.value)}
-                          className="border border-gray-300 rounded px-2 py-1 w-full text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="border border-gray-200 rounded-lg px-2 py-1.5 w-full text-right text-caption focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-base"
                         />
                       </td>
                       <td className="px-4 py-3">
@@ -249,7 +224,7 @@ function CashflowsContent() {
                           type="number"
                           value={editExpense}
                           onChange={(e) => setEditExpense(e.target.value)}
-                          className="border border-gray-300 rounded px-2 py-1 w-full text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="border border-gray-200 rounded-lg px-2 py-1.5 w-full text-right text-caption focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-base"
                         />
                       </td>
                       <td className="px-4 py-3">
@@ -257,19 +232,19 @@ function CashflowsContent() {
                           type="number"
                           value={editSavings}
                           onChange={(e) => setEditSavings(e.target.value)}
-                          className="border border-gray-300 rounded px-2 py-1 w-full text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="border border-gray-200 rounded-lg px-2 py-1.5 w-full text-right text-caption focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-base"
                         />
                       </td>
                       <td className="px-4 py-3 text-right space-x-2">
                         <button
                           onClick={() => handleUpdate(cf.id)}
-                          className="text-blue-600 hover:underline"
+                          className="text-primary font-medium hover:text-primary-light transition-base"
                         >
                           保存
                         </button>
                         <button
                           onClick={() => setEditId(null)}
-                          className="text-gray-500 hover:underline"
+                          className="text-gray-500 hover:text-gray-700 transition-base"
                         >
                           取消
                         </button>
@@ -277,19 +252,19 @@ function CashflowsContent() {
                     </>
                   ) : (
                     <>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 text-gray-900">
                         {cf.year_month.slice(0, 7)}
                       </td>
-                      <td className="px-4 py-3 text-right text-green-600">
+                      <td className="px-4 py-3 text-right font-medium text-success">
                         ¥{formatNumber(cf.income)}
                       </td>
-                      <td className="px-4 py-3 text-right text-red-600">
+                      <td className="px-4 py-3 text-right font-medium text-danger">
                         ¥{formatNumber(cf.expense)}
                       </td>
-                      <td className="px-4 py-3 text-right text-blue-600">
+                      <td className="px-4 py-3 text-right font-medium text-primary">
                         ¥{formatNumber(cf.savings)}
                       </td>
-                      <td className="px-4 py-3 text-right space-x-2">
+                      <td className="px-4 py-3 text-right space-x-3">
                         <button
                           onClick={() => {
                             setEditId(cf.id);
@@ -297,13 +272,13 @@ function CashflowsContent() {
                             setEditExpense(String(cf.expense));
                             setEditSavings(String(cf.savings));
                           }}
-                          className="text-blue-600 hover:underline"
+                          className="text-primary font-medium hover:text-primary-light transition-base"
                         >
                           編集
                         </button>
                         <button
                           onClick={() => handleDelete(cf.id)}
-                          className="text-red-600 hover:underline"
+                          className="text-danger font-medium hover:text-danger-dark transition-base"
                         >
                           削除
                         </button>
@@ -314,7 +289,7 @@ function CashflowsContent() {
               ))}
             </tbody>
           </table>
-        </div>
+        </Card>
       )}
     </div>
   );
@@ -323,9 +298,7 @@ function CashflowsContent() {
 export default function CashflowsPage() {
   return (
     <AuthGuard>
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        <CashflowsContent />
-      </main>
+      <CashflowsContent />
     </AuthGuard>
   );
 }

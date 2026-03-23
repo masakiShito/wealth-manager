@@ -5,6 +5,8 @@ import AuthGuard from "@/components/AuthGuard";
 import { useAuth } from "@/features/auth/AuthContext";
 import { fetchApiWithAuth } from "@/lib/api";
 import type { AssetAccount, AssetType } from "@/types";
+import { Button, Card, Input, Select, Alert } from "@/components/ui";
+import Loading from "@/components/ui/Loading";
 
 function AssetsContent() {
   const { token } = useAuth();
@@ -13,20 +15,17 @@ function AssetsContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Add account form
   const [showForm, setShowForm] = useState(false);
   const [formName, setFormName] = useState("");
   const [formInstitution, setFormInstitution] = useState("");
   const [formTypeId, setFormTypeId] = useState<number | "">("");
   const [formSubmitting, setFormSubmitting] = useState(false);
 
-  // Add asset type form
   const [showTypeForm, setShowTypeForm] = useState(false);
   const [typeName, setTypeName] = useState("");
   const [typeCategory, setTypeCategory] = useState("");
   const [typeSubmitting, setTypeSubmitting] = useState(false);
 
-  // Edit
   const [editId, setEditId] = useState<number | null>(null);
   const [editName, setEditName] = useState("");
   const [editInstitution, setEditInstitution] = useState("");
@@ -134,109 +133,77 @@ function AssetsContent() {
   };
 
   if (loading) {
-    return <p className="text-gray-500">読み込み中...</p>;
+    return <Loading message="資産データを取得中..." />;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">資産口座管理</h1>
+        <h1 className="text-h1">資産口座管理</h1>
         <div className="flex gap-2">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setShowTypeForm(!showTypeForm)}
-            className="border border-gray-400 text-gray-700 px-4 py-2 rounded hover:bg-gray-100 text-sm"
           >
             {showTypeForm ? "種別追加を閉じる" : "資産種別を追加"}
-          </button>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
-          >
+          </Button>
+          <Button size="sm" onClick={() => setShowForm(!showForm)}>
             {showForm ? "フォームを閉じる" : "口座を追加"}
-          </button>
+          </Button>
         </div>
       </div>
 
       {error && (
-        <p className="text-red-600 text-sm bg-red-50 p-3 rounded">{error}</p>
+        <Alert variant="error">{error}</Alert>
       )}
 
       {showTypeForm && (
-        <form
-          onSubmit={handleAddType}
-          className="bg-white border border-gray-200 rounded-lg p-5 space-y-4"
-        >
-          <h2 className="font-semibold">資産種別を追加</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label
-                htmlFor="typeName"
-                className="block text-sm font-medium mb-1"
-              >
-                種別名
-              </label>
-              <input
+        <Card>
+          <form onSubmit={handleAddType} className="space-y-4">
+            <h2 className="text-h3">資産種別を追加</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
                 id="typeName"
+                label="種別名"
                 type="text"
                 value={typeName}
                 onChange={(e) => setTypeName(e.target.value)}
                 placeholder="例: 普通預金"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="typeCategory"
-                className="block text-sm font-medium mb-1"
-              >
-                カテゴリ
-              </label>
-              <input
+              <Input
                 id="typeCategory"
+                label="カテゴリ"
                 type="text"
                 value={typeCategory}
                 onChange={(e) => setTypeCategory(e.target.value)}
                 placeholder="例: 預金"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-          </div>
-          <button
-            type="submit"
-            disabled={typeSubmitting}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 text-sm"
-          >
-            {typeSubmitting ? "追加中..." : "種別を追加"}
-          </button>
-        </form>
+            <Button type="submit" disabled={typeSubmitting} size="sm">
+              {typeSubmitting ? "追加中..." : "種別を追加"}
+            </Button>
+          </form>
+        </Card>
       )}
 
       {showForm && (
-        <form
-          onSubmit={handleAdd}
-          className="bg-white border border-gray-200 rounded-lg p-5 space-y-4"
-        >
-          <h2 className="font-semibold">新規口座を追加</h2>
-          {assetTypes.length === 0 && (
-            <p className="text-sm text-yellow-700 bg-yellow-50 p-3 rounded">
-              資産種別が登録されていません。先に「資産種別を追加」から種別を追加してください。
-            </p>
-          )}
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label
-                htmlFor="accountType"
-                className="block text-sm font-medium mb-1"
-              >
-                資産種別
-              </label>
-              <select
+        <Card>
+          <form onSubmit={handleAdd} className="space-y-4">
+            <h2 className="text-h3">新規口座を追加</h2>
+            {assetTypes.length === 0 && (
+              <Alert variant="warning">
+                資産種別が登録されていません。先に「資産種別を追加」から種別を追加してください。
+              </Alert>
+            )}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Select
                 id="accountType"
+                label="資産種別"
                 value={formTypeId}
                 onChange={(e) =>
                   setFormTypeId(e.target.value ? Number(e.target.value) : "")
                 }
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">選択してください</option>
                 {assetTypes.map((t) => (
@@ -244,69 +211,66 @@ function AssetsContent() {
                     {t.name} ({t.category})
                   </option>
                 ))}
-              </select>
-            </div>
-            <div>
-              <label
-                htmlFor="accountName"
-                className="block text-sm font-medium mb-1"
-              >
-                口座名
-              </label>
-              <input
+              </Select>
+              <Input
                 id="accountName"
+                label="口座名"
                 type="text"
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 placeholder="例: メイン口座"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="accountInstitution"
-                className="block text-sm font-medium mb-1"
-              >
-                金融機関名
-              </label>
-              <input
+              <Input
                 id="accountInstitution"
+                label="金融機関名"
                 type="text"
                 value={formInstitution}
                 onChange={(e) => setFormInstitution(e.target.value)}
                 placeholder="例: 三菱UFJ銀行"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-          </div>
-          <button
-            type="submit"
-            disabled={formSubmitting || assetTypes.length === 0}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 text-sm"
-          >
-            {formSubmitting ? "追加中..." : "口座を追加"}
-          </button>
-        </form>
+            <Button
+              type="submit"
+              disabled={formSubmitting || assetTypes.length === 0}
+              size="sm"
+            >
+              {formSubmitting ? "追加中..." : "口座を追加"}
+            </Button>
+          </form>
+        </Card>
       )}
 
       {accounts.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-lg p-8 text-center text-gray-500">
-          口座が登録されていません。「口座を追加」ボタンから追加してください。
-        </div>
+        <Card padding="lg" className="text-center">
+          <p className="text-gray-500">
+            口座が登録されていません。「口座を追加」ボタンから追加してください。
+          </p>
+        </Card>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="text-left px-4 py-3 font-medium">資産種別</th>
-                <th className="text-left px-4 py-3 font-medium">口座名</th>
-                <th className="text-left px-4 py-3 font-medium">金融機関</th>
-                <th className="text-right px-4 py-3 font-medium">操作</th>
+        <Card padding="sm" className="overflow-hidden">
+          <table className="w-full text-caption">
+            <thead>
+              <tr className="border-b border-gray-200 bg-background-subtle">
+                <th className="text-left px-4 py-3 font-medium text-gray-700">
+                  資産種別
+                </th>
+                <th className="text-left px-4 py-3 font-medium text-gray-700">
+                  口座名
+                </th>
+                <th className="text-left px-4 py-3 font-medium text-gray-700">
+                  金融機関
+                </th>
+                <th className="text-right px-4 py-3 font-medium text-gray-700">
+                  操作
+                </th>
               </tr>
             </thead>
             <tbody>
               {accounts.map((acc) => (
-                <tr key={acc.id} className="border-b border-gray-100">
+                <tr
+                  key={acc.id}
+                  className="border-b border-gray-200 last:border-b-0 transition-base hover:bg-background-subtle/50"
+                >
                   {editId === acc.id ? (
                     <>
                       <td className="px-4 py-3 text-gray-500">
@@ -317,7 +281,7 @@ function AssetsContent() {
                           type="text"
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
-                          className="border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="border border-gray-200 rounded-lg px-2 py-1.5 w-full text-caption focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-base"
                         />
                       </td>
                       <td className="px-4 py-3">
@@ -325,19 +289,19 @@ function AssetsContent() {
                           type="text"
                           value={editInstitution}
                           onChange={(e) => setEditInstitution(e.target.value)}
-                          className="border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="border border-gray-200 rounded-lg px-2 py-1.5 w-full text-caption focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-base"
                         />
                       </td>
                       <td className="px-4 py-3 text-right space-x-2">
                         <button
                           onClick={() => handleUpdate(acc.id)}
-                          className="text-blue-600 hover:underline"
+                          className="text-primary font-medium hover:text-primary-light transition-base"
                         >
                           保存
                         </button>
                         <button
                           onClick={() => setEditId(null)}
-                          className="text-gray-500 hover:underline"
+                          className="text-gray-500 hover:text-gray-700 transition-base"
                         >
                           取消
                         </button>
@@ -347,26 +311,28 @@ function AssetsContent() {
                     <>
                       <td className="px-4 py-3">
                         {acc.asset_type.name}
-                        <span className="text-gray-400 ml-1 text-xs">
+                        <span className="text-gray-500 ml-1 text-xs">
                           ({acc.asset_type.category})
                         </span>
                       </td>
-                      <td className="px-4 py-3">{acc.name}</td>
-                      <td className="px-4 py-3">{acc.institution}</td>
-                      <td className="px-4 py-3 text-right space-x-2">
+                      <td className="px-4 py-3 text-gray-900">{acc.name}</td>
+                      <td className="px-4 py-3 text-gray-700">
+                        {acc.institution}
+                      </td>
+                      <td className="px-4 py-3 text-right space-x-3">
                         <button
                           onClick={() => {
                             setEditId(acc.id);
                             setEditName(acc.name);
                             setEditInstitution(acc.institution);
                           }}
-                          className="text-blue-600 hover:underline"
+                          className="text-primary font-medium hover:text-primary-light transition-base"
                         >
                           編集
                         </button>
                         <button
                           onClick={() => handleDelete(acc.id)}
-                          className="text-red-600 hover:underline"
+                          className="text-danger font-medium hover:text-danger-dark transition-base"
                         >
                           削除
                         </button>
@@ -377,7 +343,7 @@ function AssetsContent() {
               ))}
             </tbody>
           </table>
-        </div>
+        </Card>
       )}
     </div>
   );
@@ -386,9 +352,7 @@ function AssetsContent() {
 export default function AssetsPage() {
   return (
     <AuthGuard>
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        <AssetsContent />
-      </main>
+      <AssetsContent />
     </AuthGuard>
   );
 }
